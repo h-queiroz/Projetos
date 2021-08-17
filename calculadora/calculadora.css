@@ -1,0 +1,79 @@
+body{
+  box-sizing: border-box;
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Open Sans';
+  user-select: none;
+}
+
+#caixa{
+  margin: auto;
+  /* width: 450px; */
+  width: 650px;
+  /* height: 600px; */
+  height: 650px;
+  background-color: #008408;
+  position: relative;
+  /* top: 30px; */
+  top: 2px;
+  border-radius: 10px;
+}
+
+header{
+  width: 80%;
+  height: 14%;
+  border: red solid 2px;
+  overflow-x: hidden;
+  position: relative;
+  /* top: 20px; */
+  top: 30px;
+  /* left: 45px; */
+  left: 63px;
+  font-size: 35px;
+  padding: 15px;
+  box-sizing: border-box;
+  color: white;
+  white-space: nowrap;
+  display: inline-block;
+  text-align: right;
+  border-radius: 7px;
+  background-color: black;
+}
+
+section{
+  width: 80%;
+  height: 74%;
+  border: black solid 2px;
+  margin: auto;
+  position: relative;
+  /* top: 40px; */
+  top: 50px;
+  border-radius: 7px;
+}
+
+.botao{
+  display: inline-block;
+  /* width: 27%; */
+  width: 19%;
+  height: 20%;
+  background-color: #5a58ce;
+  /* margin: 15px 0 0 17px; */
+  margin: 22px 0 0 24px;
+  font-size: 35px;
+  text-align: center;
+  border-radius: 20px;
+}
+
+.botao .content{
+  height: 100%;
+  line-height: 88px;
+}
+
+.botao:active{
+  box-sizing: border-box;
+  background-color: black;
+  color: #5a58ce;
+  border: #5a58ce 2px solid;
+}
