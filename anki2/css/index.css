@@ -1,0 +1,72 @@
+body{
+  background-color: #42bcf5;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+div{
+  width: 500px;
+  /* border: solid black 1px; */
+}
+
+.show-kanji{
+  height: 400px;
+  border: black 1px solid;
+  background-color: white;
+  text-align: center;
+  line-height: 400px;
+  font-size: 120px;
+  font-family: 'M PLUS Rounded 1c';
+}
+
+.response{
+  background-color: white;
+  height: 100px;
+}
+
+.response input{
+  background-color: pink;
+  color: red;
+  width: 100%;
+  line-height: 100px;
+  font-size: 40px;
+  border: 0;
+  text-align: center;
+  text-shadow: 5px 5px 2px green;
+}
+
+.response input::selection, div::selection, a::selection{
+  background-color: orange;
+}
+
+.response input::placeholder{
+  color: red;
+  text-shadow: 5px 5px 2px green;
+  font-size: 30px;
+}
+
+
+/* Link para página de Criação */
+a{
+  font-size: 30px;
+  color: black;
+  text-decoration: none;
+  position: absolute;
+  top: 5px;
+}
+
+a:hover{
+  color: red;
+}
+
+#create{
+  left: 10px;
+}
+
+#list{
+  right: 10px;
+}
