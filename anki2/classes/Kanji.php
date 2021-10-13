@@ -23,7 +23,7 @@ class Kanji{
   }
 
   public function list(){
-    $query = $this->pdo->query('SELECT simbolo,ntracos,english,kana,romaji FROM kanji LIMIT 2');
+    $query = $this->pdo->query('SELECT simbolo,ntracos,english,kana,romaji FROM kanji');
     $lista = $query->fetchAll(PDO::FETCH_ASSOC);
     return $lista;
   }

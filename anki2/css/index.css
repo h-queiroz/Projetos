@@ -1,16 +1,18 @@
 body{
   background-color: #42bcf5;
-  height: 100vh;
   margin: 0;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
 }
 
-div{
-  width: 500px;
-  /* border: solid black 1px; */
+
+/* Faz com que a barra de scrool não apareça mas mesmo assim funciona */
+body::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
 }
 
 .show-kanji{
@@ -21,11 +23,13 @@ div{
   line-height: 400px;
   font-size: 120px;
   font-family: 'M PLUS Rounded 1c';
+  width: 500px;
 }
 
 .response{
   background-color: white;
   height: 100px;
+  width: 500px;
 }
 
 .response input{
@@ -47,6 +51,12 @@ div{
   color: red;
   text-shadow: 5px 5px 2px green;
   font-size: 30px;
+}
+
+.contadores{
+  position: absolute;
+  left: 10px;
+  top: 35px;
 }
 
 
