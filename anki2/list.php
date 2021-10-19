@@ -20,6 +20,9 @@ $lista = $kanji->list();
         font-family: sans-serif;
         background-color: rgb(83, 86, 92);
       }
+      a{
+        color:black;
+      }
       table{
         margin: auto;
         background-color: white;
@@ -34,6 +37,7 @@ $lista = $kanji->list();
         <th width="200">Kana</th>
         <th width='200'>English</th>
         <th width='170'>N° de traços</th>
+        <th width='120'>Ações</th>
       </tr>
         <?php
         foreach($lista as $kanji){
@@ -42,6 +46,7 @@ $lista = $kanji->list();
           echo "<td>".$kanji['kana']."</td>";
           echo "<td>".$kanji['english']."</td>";
           echo "<td>".$kanji['ntracos']."</td>";
+          echo "<td><a href='#'><img src='assets/edit.png' width='30px'></a></td>";
           echo "</tr>";
         }
 

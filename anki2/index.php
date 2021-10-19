@@ -25,7 +25,23 @@
     <a href="create.php" id='create'>← Inserir Kanji</a>
     <a href="list.php" id='list'>Lista de Kanji's →</a>
 
-    <!-- Onde o Kanji será inserido -->
+    <!-- Selecionar Modo Escuro -->
+    <div class="dark-mode">
+      <h3>Selecione o modo</h3>
+      <label>Claro
+        <input id="bright" type="radio" name="mode" value="bright">
+      </label>
+      <label>Escuro
+        <input id="dark" type="radio" name="mode" value="dark" checked>
+      </label>
+    </div>
+
+    <!-- Onde o kanji prévio é mostrado -->
+    <div class="previous">
+
+    </div>
+
+    <!-- Onde o Kanji Atual será inserido -->
     <div class="show-kanji"></div>
 
     <!-- Onde você digita o romaji do Kanji mostrado -->
@@ -43,14 +59,34 @@
       // Pegando itens do DOM
       let kanjis = [];
       let espaco = document.querySelector('.show-kanji');
-      let resposta = document.querySelector('input');
+      let response = document.querySelector('.response');
+      let resposta = document.querySelector('input[name="Resposta"]');
+      let bright = document.querySelector('#bright')
+      let dark = document.querySelector('#dark')
       let contadores = document.querySelector('.contadores');
+      let anterior;
+      let previous = document.querySelector('.previous');
       let faltam = document.querySelector('#faltam');
       let erros = document.querySelector('#erros');
       let nerros = 1;
       let height = document.body.offsetHeight;
       let width = document.body.offsetWidth;
       document.body.style = 'width:'+document.body.offsetWidth+'px;height:'+document.body.offsetHeight+'px';
+
+      // Criando os eventos do modo escuro e padrão
+      dark.addEventListener('change',function(event){
+        document.body.style = "background-color: #246b93";
+        espaco.style = "background-color: #274060";
+        previous.style = "background-color: #274060";
+        resposta.style = "background-color: #274060";
+      });
+
+      bright.addEventListener('change',function(event){
+        document.body.style = "background-color: #42BCF5";
+        espaco.style = "background-color: white";
+        previous.style = "background-color: white";
+        resposta.style = "background-color: white";
+      });
 
       // Fazendo requisição de todos os kanjis no bando de dados
       $.ajax({
@@ -81,6 +117,8 @@
                   alert('Parabéns acabaram os kanji');
                 }else{
                   // Se não, mostre outro.
+                  anterior = atual;
+                  previous.innerHTML = '<span>'+anterior.simbolo+'</span><span>'+anterior.kana+'</span><span>'+anterior.english+'</span>';
                   pos = Math.floor(Math.random() * (kanjis.length - 0) + 0);
                   atual = kanjis.splice(pos,1)[0];
                   console.log(atual);
@@ -94,7 +132,14 @@
                 erros.innerHTML = "Erros: "+nerros++;
                 espaco.style = 'background-color: red';
                 setTimeout(function(){
-                  espaco.style = 'background-color: white';
+                  if (bright.checked) {
+                    espaco.style = 'background-color: white';
+                    previous.style = 'background-color: white';
+                    previous.style = 'background-color: white';
+                  }else{
+                    espaco.style = 'background-color: #274060';
+                    previous.style = 'background-color: #274060';
+                  }
                 },100);
               }
             }

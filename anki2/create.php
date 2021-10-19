@@ -31,14 +31,14 @@ if ($_POST && !empty($_POST['simbolo']) && !empty($_POST['romaji']) && !empty($_
       <form method="post">
         <label for="simbolo">Símbolo</label>
         <input type="text" name="simbolo" autofocus autocomplete="off"><br>
-        <label for="romaji">Romaji</label>
-        <input type="text" name="romaji" autocomplete="off"><br>
-        <label for="tracos">Nº de Traços</label>
-        <input type="number" name="tracos" autocomplete="off"><br>
-        <label for="english">English</label>
-        <input type="text" name="english" autocomplete="off"><br>
         <label for="kana">Kana</label>
         <input type="text" name="kana" autocomplete="off"><br>
+        <label for="romaji">Romaji</label>
+        <input type="text" name="romaji" autocomplete="off"><br>
+        <label for="english">English</label>
+        <input type="text" name="english" autocomplete="off"><br>
+        <label for="tracos">Nº de Traços</label>
+        <input type="number" name="tracos" autocomplete="off"><br>
         <button type="submit">Enviar</button>
       </form>
     </fieldset>
