@@ -36,6 +36,7 @@ $lista = $kanji->list();
         <th width='130'>Símbolo</th>
         <th width="200">Kana</th>
         <th width='200'>English</th>
+        <th width='100'>JLPT</th>
         <th width='170'>N° de traços</th>
         <th width='120'>Ações</th>
       </tr>
@@ -45,6 +46,7 @@ $lista = $kanji->list();
           echo "<td>".$kanji['simbolo']."</td>";
           echo "<td>".$kanji['kana']."</td>";
           echo "<td>".$kanji['english']."</td>";
+          echo "<td>".$kanji['JLPT']."</td>";
           echo "<td>".$kanji['ntracos']."</td>";
           echo "<td><a href='#'><img src='assets/edit.png' width='30px'></a></td>";
           echo "</tr>";

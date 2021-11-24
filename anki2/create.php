@@ -1,9 +1,12 @@
 <?php
 require('classes/Kanji.php');
 
-if ($_POST && !empty($_POST['simbolo']) && !empty($_POST['romaji']) && !empty($_POST['tracos']) && !empty($_POST['english']) && !empty($_POST['kana'])) {
+if ($_POST) {
   $kanji = new Kanji();
-  $kanji->create(addslashes($_POST['simbolo']),addslashes($_POST['romaji']),addslashes($_POST['tracos']),addslashes($_POST['english']),addslashes($_POST['kana']));
+  $kanji->create($_POST['simbolo'],$_POST['romaji'],$_POST['tracos'],$_POST['english'],$_POST['kana'],$_POST['JLPT']);
+  echo '<pre>';
+  print_r($_POST);
+  echo '</pre>';
 }
 
  ?>
@@ -37,8 +40,13 @@ if ($_POST && !empty($_POST['simbolo']) && !empty($_POST['romaji']) && !empty($_
         <input type="text" name="romaji" autocomplete="off"><br>
         <label for="english">English</label>
         <input type="text" name="english" autocomplete="off"><br>
+        <label for="JLPT">JLPT</label>
+        <select name="JLPT">
+          <option value="N5">N5</option>
+          <option value="N4" selected>N4</option>
+        </select><br>
         <label for="tracos">Nº de Traços</label>
-        <input type="number" name="tracos" autocomplete="off"><br>
+        <input type="number" name="tracos" autocomplete="off" value='0'><br>
         <button type="submit">Enviar</button>
       </form>
     </fieldset>

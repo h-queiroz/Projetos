@@ -36,6 +36,28 @@
       </label>
     </div>
 
+    <!-- Onde seleciona quais Kanji mostrar -->
+    <div class="JLPT">
+      <form class="JLPT-form">
+        <label>
+          <input type="checkbox" name="JLPTs[]" value="N5" checked>JLPT N5
+        </label>
+        <label>
+          <input type="checkbox" name="JLPTs[]" value="N4">JLPT N4
+        </label>
+        <label>
+          <input type="checkbox" name="JLPTs[]" value="N3">JLPT N3
+        </label>
+        <label>
+          <input type="checkbox" name="JLPTs[]" value="N2">JLPT N2
+        </label>
+        <label>
+          <input type="checkbox" name="JLPTs[]" value="N1">JLPT N1
+        </label>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
     <!-- Onde o kanji prévio é mostrado -->
     <div class="previous">
 
@@ -69,9 +91,23 @@
       let faltam = document.querySelector('#faltam');
       let erros = document.querySelector('#erros');
       let nerros = 1;
-      let height = document.body.offsetHeight;
-      let width = document.body.offsetWidth;
-      document.body.style = 'width:'+document.body.offsetWidth+'px;height:'+document.body.offsetHeight+'px';
+      // let height = document.body.offsetHeight;
+      // let width = document.body.offsetWidth;
+      // document.body.style = 'width:'+document.body.offsetWidth+'px;height:'+document.body.offsetHeight+'px';
+      let form = document.querySelector('.JLPT-form');
+      let submit = document.querySelector('button[type=submit]');
+      form.onsubmit = function(event){
+        event.preventDefault();
+        let niveis = {levels: []};
+        form.elements['JLPTs[]'].forEach(function(element){
+          if(element.checked){
+            niveis.levels.push(element.value);
+          }
+        });
+        // console.log('Aqui');
+        requisitar(niveis);
+      }
+      // console.dir(form);
 
       // Criando os eventos do modo escuro e padrão
       dark.addEventListener('change',function(event){
@@ -89,64 +125,69 @@
       });
 
       // Fazendo requisição de todos os kanjis no bando de dados
-      $.ajax({
-        type:'GET',
-        url:'request.php',
-        dataType:'JSON',
-        // Inserindo eles na variável kanjis se a requisição for feita com sucesso
-        success:function(result){
-          result.forEach(function(kanji){
-            kanjis.push(kanji);
-          })
-          // Pegando um kanji aleatório e inserindo na variável atual e colocando a atual na tela
-          let pos = Math.floor(Math.random() * (kanjis.length - 0) + 0);
-          let atual = kanjis.splice(pos,1)[0];
-          espaco.innerHTML = atual.simbolo;
-          faltam.innerHTML = "Quantos faltam: "+kanjis.length;
+      function requisitar(niveis){
+        kanjis = [];
+        $.ajax({
+          type:'POST',
+          url:'request.php',
+          data: niveis,
+          dataType:'JSON',
+          // Inserindo eles na variável kanjis se a requisição for feita com sucesso
+          success:function(result){
+              console.log(result);
+              result.forEach(function(kanji){
+                kanjis.push(kanji);
+              })
+            // Pegando um kanji aleatório e inserindo na variável atual e colocando a atual na tela
+            let pos = Math.floor(Math.random() * kanjis.length);
+            let atual = kanjis.splice(pos,1)[0];
+            espaco.innerHTML = atual.simbolo;
+            faltam.innerHTML = "Quantos faltam: "+(kanjis.length + 1);
 
-          // Gerando Evento que se o tecla "Enter" for pressionada, fará a verificação se o que foi digitado está certo
-          document.addEventListener('keypress',function(event){
-            // Se pressionar "Enter" e campo não estiver vazio..
-            if (event.key == 'Enter' && resposta.value != '') {
-              // Se o que foi digitado estiver certo..
-              if (resposta.value == atual.romaji) {
-                // E se não sobrar mais nenhum kanji a ser verificado
-                if (kanjis.length == 0) {
-                  // Mostre isso..
-                  espaco.style = 'background-color: green';
-                  alert('Parabéns acabaram os kanji');
-                }else{
-                  // Se não, mostre outro.
-                  anterior = atual;
-                  previous.innerHTML = '<span>'+anterior.simbolo+'</span><span>'+anterior.kana+'</span><span>'+anterior.english+'</span>';
-                  pos = Math.floor(Math.random() * (kanjis.length - 0) + 0);
-                  atual = kanjis.splice(pos,1)[0];
-                  console.log(atual);
-                  console.log("Quantos faltam : "+kanjis.length);
-                  espaco.innerHTML = atual.simbolo;
-                  faltam.innerHTML = "Quantos faltam: "+kanjis.length;
-                  resposta.value = '';
-                }
-              }else{
-                // Ações para se digitou errado
-                erros.innerHTML = "Erros: "+nerros++;
-                espaco.style = 'background-color: red';
-                setTimeout(function(){
-                  if (bright.checked) {
-                    espaco.style = 'background-color: white';
-                    previous.style = 'background-color: white';
-                    previous.style = 'background-color: white';
+            // Gerando Evento que se o tecla "Enter" for pressionada, fará a verificação se o que foi digitado está certo
+            document.addEventListener('keypress',function(event){
+              // Se pressionar "Enter" e campo não estiver vazio..
+              if (event.key == 'Enter' && resposta.value != '') {
+                // Se o que foi digitado estiver certo..
+                if (resposta.value == atual.romaji) {
+                  // E se não sobrar mais nenhum kanji a ser verificado
+                  if (kanjis.length == 0) {
+                    // Mostre isso..
+                    alert('Parabéns acabaram os kanji');
+                    espaco.style = 'background-color: green';
+                    faltam.innerHTML = "Quantos faltam: 0";
                   }else{
-                    espaco.style = 'background-color: #274060';
-                    previous.style = 'background-color: #274060';
+                    // Se não, mostre outro.
+                    anterior = atual;
+                    previous.innerHTML = '<span>'+anterior.simbolo+'</span><span>'+anterior.kana+'</span><span>'+anterior.english+'</span>';
+                    pos = Math.floor(Math.random() * kanjis.length);
+                    atual = kanjis.splice(pos,1)[0];
+                    console.log(atual);
+                    console.log("Quantos faltam : "+kanjis.length);
+                    espaco.innerHTML = atual.simbolo;
+                    faltam.innerHTML = "Quantos faltam: "+(kanjis.length + 1);
+                    resposta.value = '';
                   }
-                },100);
+                }else{
+                  // Ações para se digitou errado
+                  erros.innerHTML = "Erros: "+nerros++;
+                  espaco.style = 'background-color: red';
+                  setTimeout(function(){
+                    if (bright.checked) {
+                      espaco.style = 'background-color: white';
+                      previous.style = 'background-color: white';
+                      previous.style = 'background-color: white';
+                    }else{
+                      espaco.style = 'background-color: #274060';
+                      previous.style = 'background-color: #274060';
+                    }
+                  },100);
+                }
               }
-            }
-          })
-        }
-      })
-
+            })
+          }
+        })
+      }
     </script>
   </body>
 </html>
