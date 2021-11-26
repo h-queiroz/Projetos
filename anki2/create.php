@@ -4,9 +4,9 @@ require('classes/Kanji.php');
 if ($_POST) {
   $kanji = new Kanji();
   $kanji->create($_POST['simbolo'],$_POST['romaji'],$_POST['tracos'],$_POST['english'],$_POST['kana'],$_POST['JLPT']);
-  echo '<pre>';
-  print_r($_POST);
-  echo '</pre>';
+  // echo '<pre>';
+  // print_r($_POST);
+  // echo '</pre>';
 }
 
  ?>
