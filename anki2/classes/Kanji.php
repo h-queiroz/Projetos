@@ -1,5 +1,5 @@
 <?php
-require('BancoDados.php');
+require_once('BancoDados.php');
 
 class Kanji{
 
@@ -11,16 +11,19 @@ class Kanji{
     $this->pdo = $this->pdo->getPdo();
   }
 
-  public function create($s,$r,$t,$e,$k,$j){
-    $query = $this->pdo->prepare('INSERT INTO kanji(simbolo, romaji, ntracos, english, kana, JLPT) VALUES (:s,:r,:t,:e,:k,:j)');
+  public function create($s,$r,$n,$e,$k,$j,$t){
+    $query = $this->pdo->prepare('INSERT INTO kanji(simbolo, romaji, ntracos, english, kana, JLPT,tags) VALUES (:s,:r,:n,:e,:k,:j,:t)');
     $query->bindValue(':s',addslashes($s));
     $query->bindValue(':r',addslashes($r));
-    $query->bindValue(':t',addslashes($t));
+    $query->bindValue(':n',addslashes($n));
     $query->bindValue(':e',addslashes($e));
     $query->bindValue(':k',addslashes($k));
     $query->bindValue(':j',addslashes($j));
-    $query->execute();
-    $this->ultimo = true;
+    $query->bindValue(':t',addslashes($t));
+    if(strlen($s) > 0 && strlen($r) > 0 && $n != 0 && strlen($e) > 0 && strlen($k) > 0 && $j != null){
+      $query->execute();
+      $this->ultimo = true;
+    }
   }
 
   public function list(){

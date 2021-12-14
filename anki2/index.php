@@ -127,50 +127,81 @@
         let pos = Math.floor(Math.random() * kanjis.length);
         let atual = kanjis.splice(pos,1)[0];
         espaco.innerHTML = atual.simbolo;
-        faltam.innerHTML = "Quantos faltam: "+(kanjis.length + 1);
-
-        if(previous.innerHTML == ''){
-          // Gerando Evento que se o tecla "Enter" for pressionada, fará a verificação se o que foi digitado está certo
-          document.addEventListener('keypress',function(event){
-            // Se pressionar "Enter" e campo não estiver vazio..
-            if (event.key == 'Enter' && resposta.value != '') {
-              // Se o que foi digitado estiver certo..
-              if (resposta.value == atual.romaji) {
-                // E se não sobrar mais nenhum kanji a ser verificado
-                if (kanjis.length == 0) {
-                  // Mostre isso..
-                  alert('Parabéns acabaram os kanji');
-                  espaco.style = 'background-color: green';
-                  faltam.innerHTML = "Quantos faltam: 0";
-                }else{
-                  // Se não, mostre outro.
-                  anterior = atual;
-                  previous.innerHTML = '<span>'+anterior.simbolo+'</span><span>'+anterior.kana+'</span><span>'+anterior.english+'</span>';
-                  pos = Math.floor(Math.random() * kanjis.length);
-                  atual = kanjis.splice(pos,1)[0];
-                  console.log(atual);
-                  console.log("Quantos faltam : "+kanjis.length);
-                  espaco.innerHTML = atual.simbolo;
-                  faltam.innerHTML = "Quantos faltam: "+(kanjis.length + 1);
-                  resposta.value = '';
-                }
-              }else{
-                // Ações para se digitou errado
-                erros.innerHTML = `Erros: ${nerros += 1}`;
-                espaco.style = 'background-color: red';
-                setTimeout(function(){
-                  if (bright.checked) {
-                    espaco.style = 'background-color: white';
-                    previous.style = 'background-color: white';
-                    previous.style = 'background-color: white';
-                  }else{
-                    espaco.style = 'background-color: #274060';
-                    previous.style = 'background-color: #274060';
-                  }
-                },100);
-              }
+        console.log(atual);
+        if(atual.tags != null){
+          let span = document.createElement('span');
+          $.ajax({
+            type: 'POST',
+            url: 'tags-request.php',
+            data: {id: atual.tags},
+            dataType: 'JSON',
+            success: function(result){
+              console.log("Tag:"+result);
+              let largura = espaco.clientWidth / 2;
+              span.innerText = result;
+              espaco.appendChild(span);
+              span.style = 'left:'+(largura - (span.clientWidth/2))+'px';
             }
           })
+        }
+        faltam.innerHTML = "Quantos faltam: "+(kanjis.length + 1);
+
+        // Gerando Evento que se o tecla "Enter" for pressionada, fará a verificação se o que foi digitado está certo
+        document.onkeypress = function(event){
+          // Se pressionar "Enter" e campo não estiver vazio..
+          if (event.key == 'Enter' && resposta.value != '') {
+            // Se o que foi digitado estiver certo..
+            if (resposta.value == atual.romaji) {
+              // E se não sobrar mais nenhum kanji a ser verificado
+              if (kanjis.length == 0) {
+                // Mostre isso..
+                alert('Parabéns acabaram os kanji');
+                espaco.style = 'background-color: green';
+                faltam.innerHTML = "Quantos faltam: 0";
+              }else{
+                // Se ainda tiver kanjis, mostre outro.
+                anterior = atual;
+                previous.innerHTML = '<span>'+anterior.simbolo+'</span><span>'+anterior.kana+'</span><span>'+anterior.english+'</span>';
+                pos = Math.floor(Math.random() * kanjis.length);
+                atual = kanjis.splice(pos,1)[0];
+                console.log(atual);
+                console.log("Quantos faltam : "+kanjis.length);
+                espaco.innerHTML = atual.simbolo;
+                if(atual.tags != null){
+                  let span = document.createElement('span');
+                  $.ajax({
+                    type: 'POST',
+                    url: 'tags-request.php',
+                    data: {id: atual.tags},
+                    dataType: 'JSON',
+                    success: function(result){
+                      console.log("Tag:"+result);
+                      let largura = espaco.clientWidth / 2;
+                      span.innerText = result;
+                      espaco.appendChild(span);
+                      span.style = 'left:'+(largura - (span.clientWidth/2))+'px';
+                    }
+                  })
+                }
+                faltam.innerHTML = "Quantos faltam: "+(kanjis.length + 1);
+                resposta.value = '';
+              }
+            }else{
+              // Ações para se digitou errado
+              erros.innerHTML = `Erros: ${nerros += 1}`;
+              espaco.style = 'background-color: red';
+              setTimeout(function(){
+                if (bright.checked) {
+                  espaco.style = 'background-color: white';
+                  previous.style = 'background-color: white';
+                  previous.style = 'background-color: white';
+                }else{
+                  espaco.style = 'background-color: #274060';
+                  previous.style = 'background-color: #274060';
+                }
+              },100);
+            }
+          }
         }
       }
 
@@ -180,6 +211,7 @@
         kanjis = [];
         previous.innerHTML = '';
         nerros = 0;
+        erros.innerHTML = `Erros: ${nerros}`;
         espaco.style = 'background-color: #274060';
         resposta.value = '';
 
@@ -194,6 +226,9 @@
               kanjis.push(kanji);
             })
 
+
+            // kanjis = kanjis.filter(kanji => kanji.tags != null);
+            // console.log(kanjis);
             jogar(kanjis);
           }
         })

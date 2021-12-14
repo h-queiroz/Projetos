@@ -1,6 +1,8 @@
 <?php
 require ('classes/Kanji.php');
+require ('classes/Tag.php');
 
+$objectTag = new Tag();
 $kanji = new Kanji();
 $lista = $kanji->list();
 
@@ -27,25 +29,50 @@ $lista = $kanji->list();
         margin: auto;
         background-color: white;
       }
+      td{
+        padding: auto 5px;
+      }
+
+      tbody tr td:nth-child(1){
+        background-color: rgba(0,0,0,0.7);
+        color: white;
+      }
+
+      tbody tr td:nth-child(2), tbody tr td:nth-child(3), tbody tr td:nth-child(4){
+        font-size: 30px;
+      }
     </style>
   </head>
   <body>
     <a href="index.php">← Voltar</a><br><br>
     <table border='1'>
       <tr bgcolor='#878b91'>
-        <th width='130'>Símbolo</th>
+        <th width='50'>ID</th>
+        <th width='170'>Símbolo</th>
         <th width="200">Kana</th>
         <th width='200'>English</th>
+        <th width='200'>Tag</th>
         <th width='100'>JLPT</th>
-        <th width='170'>N° de traços</th>
+        <th width='70'>N° de traços</th>
         <th width='120'>Ações</th>
       </tr>
         <?php
         foreach($lista as $kanji){
           echo "<tr align='center'>";
+          echo "<td>".$kanji['id']."</td>";
           echo "<td>".$kanji['simbolo']."</td>";
           echo "<td>".$kanji['kana']."</td>";
           echo "<td>".$kanji['english']."</td>";
+          if ($kanji['tags'] != null) {
+            $tags = $objectTag->search($kanji['tags']);
+            if(gettype($tags) != 'array'){
+              echo "<td>".$tags."</td>";
+            }else{
+              echo "<td>".implode(' / ',$tags)."</td>";
+            }
+          }else{
+            echo "<td>-</td>";
+          }
           echo "<td>".$kanji['JLPT']."</td>";
           echo "<td>".$kanji['ntracos']."</td>";
           echo "<td><a href='#'><img src='assets/edit.png' width='30px'></a></td>";

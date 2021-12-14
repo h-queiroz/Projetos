@@ -87,7 +87,22 @@ body::-webkit-scrollbar {
   font-size: 120px;
   font-family: 'M PLUS Rounded 1c';
   width: 500px;
+  position: relative;
 }
+
+.show-kanji span{
+  position: absolute;
+  bottom: 25px;
+  /* left: 180px; */
+  display: block;
+  font-size: 25px;
+  line-height: 20px;
+  background-color: #4e1ca5;
+  padding: 10px;
+  border: 2px black solid;
+  border-radius: 10px;
+}
+
 
 .response{
   height: 100px;
