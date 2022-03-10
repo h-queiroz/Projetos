@@ -63,15 +63,15 @@ $lista = $kanji->list();
           echo "<td>".$kanji['simbolo']."</td>";
           echo "<td>".$kanji['kana']."</td>";
           echo "<td>".$kanji['english']."</td>";
-          if ($kanji['tags'] != null) {
+          if ($kanji['tags'] == null || $kanji['tags'] == 'NULL') {
+            echo "<td>-</td>";
+          }else{
             $tags = $objectTag->search($kanji['tags']);
             if(gettype($tags) != 'array'){
               echo "<td>".$tags."</td>";
             }else{
               echo "<td>".implode(' / ',$tags)."</td>";
             }
-          }else{
-            echo "<td>-</td>";
           }
           echo "<td>".$kanji['JLPT']."</td>";
           echo "<td>".$kanji['ntracos']."</td>";

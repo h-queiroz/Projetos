@@ -1,22 +1,20 @@
 <?php
 require('classes/Kanji.php');
+require('classes/Tag.php');
 
 if ($_POST) {
   $kanji = new Kanji();
   if (isset($_POST['tags']) && count($_POST['tags']) > 1) {
-    $kanji->create($_POST['simbolo'],$_POST['romaji'],$_POST['tracos'],$_POST['english'],$_POST['kana'],$_POST['JLPT'],implode($_POST['tags']));
+    $kanji->create($_POST['simbolo'],$_POST['romaji'],$_POST['tracos'],$_POST['english'],$_POST['kana'],$_POST['JLPT'],implode(',',$_POST['tags']));
   }elseif(isset($_POST['tags']) && count($_POST['tags']) == 1){
     $kanji->create($_POST['simbolo'],$_POST['romaji'],$_POST['tracos'],$_POST['english'],$_POST['kana'],$_POST['JLPT'],$_POST['tags'][0]);
   }else{
-    $kanji->create($_POST['simbolo'],$_POST['romaji'],$_POST['tracos'],$_POST['english'],$_POST['kana'],$_POST['JLPT'],NULL);
+    $kanji->create($_POST['simbolo'],$_POST['romaji'],$_POST['tracos'],$_POST['english'],$_POST['kana'],$_POST['JLPT'],'NULL');
   }
 
-  echo '<pre>';
-  print_r($_POST);
-  if(isset($_POST['tags'])){
-    echo implode($_POST['tags']);
-  }
-  echo '</pre>';
+  // echo '<pre>';
+  // print_r($_POST);
+  // echo '</pre>';
 }
 
  ?>
@@ -58,33 +56,17 @@ if ($_POST) {
         </select>
         <input type="number" name="tracos" autocomplete="off" value='0' placeholder="Nº de Traços"><br>
         <br>
-        <label>
-          <input type="checkbox" name="tags[]" value="1">Prefix
-        </label>
-        <label>
-          <input type="checkbox" name="tags[]" value="2">Sufix
-        </label>
-        <label>
-          <input type="checkbox" name="tags[]" value="3">Humble
-        </label>
-        <label>
-          <input type="checkbox" name="tags[]" value="4">Honorific
-        </label><br>
-        <label>
-          <input type="checkbox" name="tags[]" value="5">Noun
-        </label>
-        <label>
-          <input type="checkbox" name="tags[]" value="6">する verb
-        </label>
-        <label>
-          <input type="checkbox" name="tags[]" value="7">Transitive Verb
-        </label><br>
-        <label>
-          <input type="checkbox" name="tags[]" value="8">Polite
-        </label>
-        <label>
-          <input type="checkbox" name="tags[]" value="9">Adjective
-        </label>
+        <?php
+        $tags = new Tag();
+        $tags = $tags->list();
+        foreach ($tags as $tag) {
+          ?>
+          <label>
+            <input type="checkbox" name="tags[]" value="<?php echo $tag['id'] ?>"><?php echo $tag['nome'] ?>
+          </label>
+          <?php
+        }
+         ?>
         <br><br>
         <button type="submit">Enviar</button>
       </form>

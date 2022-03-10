@@ -10,6 +10,11 @@ class Tag{
     $this->pdo = $this->pdo->getPdo();
   }
 
+  public function list(){
+    $query = $this->pdo->query('SELECT * FROM tags');
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   public function search($id){
     if (strlen($id) == 1) {
       $query = $this->pdo->prepare('SELECT nome FROM tags WHERE id = :id');
@@ -18,7 +23,7 @@ class Tag{
       $result = $query->fetch(PDO::FETCH_ASSOC);
       $result = $result['nome'];
     }else{
-      $tags = str_split($id);
+      $tags = explode(',',$id);
       $result = [];
       foreach ($tags as $tag){
         $query = $this->pdo->prepare('SELECT nome FROM tags WHERE id = :id');
