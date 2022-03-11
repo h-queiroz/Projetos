@@ -109,6 +109,7 @@
       let form = document.querySelector('.JLPT-form');
       let jlpt = document.querySelector('.JLPT');
       let submit = document.querySelector('button[type=submit]');
+      let levels;
       form.onsubmit = function(event){
         event.preventDefault();
         let niveis = {levels: []};
@@ -117,6 +118,7 @@
             niveis.levels.push(element.value);
           }
         });
+        levels = niveis.levels;
         requisitar(niveis);
       }
 
@@ -158,14 +160,34 @@
         }
       }
 
+      // Criando função de contagem a partir do momento que começar o jogo
+      let contador;
+      function contar(){
+        let minutos = 0;
+        let segundos = 0;
+        if(typeof contador !== undefined){
+          clearInterval(contador);
+          timeMsg = `Contagem ${("0"+minutos).slice(-2)}:${("0"+segundos).slice(-2)}`;
+          time.innerHTML = timeMsg;
+        }
+        contador = setInterval(() => {
+          segundos++;
+          if(segundos >= 60){
+            segundos = 0;
+            minutos++;
+          }
+          timeMsg = `Contagem ${("0"+minutos).slice(-2)}:${("0"+segundos).slice(-2)}`;
+          time.innerHTML = timeMsg;
+        },1000);
+      }
 
       function jogar(kanjis){
 
         // Misturando o array inteiro e limitando para ter apenas 10 kanjis
-        kanjis = kanjis.sort(() => Math.random() - 0.5);
-        while(kanjis.length > 3){
-          kanjis.pop();
-        }
+        // kanjis = kanjis.sort(() => Math.random() - 0.5);
+        // while(kanjis.length > 3){
+        //   kanjis.pop();
+        // }
         // console.log(kanjis);
 
         // Pegando um kanji aleatório e inserindo na variável atual e colocando a atual na tela
@@ -193,18 +215,7 @@
         }
         faltam.innerHTML = "Quantos faltam: "+(kanjis.length + 1);
 
-        // Criando função de contagem a partir do momento que começar o jogo
-        let minutos = 0;
-        let segundos = 0;
-        let contador = setInterval(() => {
-          segundos++;
-          if(segundos >= 60){
-            segundos = 0;
-            minutos++;
-          }
-          timeMsg = `Contagem ${("0"+minutos).slice(-2)}:${("0"+segundos).slice(-2)}`;
-          time.innerHTML = timeMsg;
-        },1000);
+        contar();
 
         // Gerando Evento que se o tecla "Enter" for pressionada, fará a verificação se o que foi digitado está certo
         resposta.onkeypress = function(event){
@@ -225,9 +236,23 @@
                 $.ajax({
                   type: 'POST',
                   url: 'tempo-request.php',
-                  data: {erros: nerros,tempo: `${timeMsg.slice(9)}`},
+                  data: {'erros': nerros,'tempo': `${timeMsg.slice(9)}`,'niveis': levels},
                   dataType: 'JSON'
-                }).done(() => console.log('Registrado'));
+                  // success: (result) => {
+                  //   console.log('success');
+                  //   console.log(result);
+                  // },
+                  // error: (result) => {
+                  //   console.log('error');
+                  //   console.log(result);
+                  // },
+                  // complete: (result) => {
+                  //   console.log('complete');
+                  //   console.log(result);
+                  // }
+                })
+                // .done(() => alert('Registrado'))
+                // .fail(() => alert('Não registrado'));
 
               }else{
                 // Se ainda tiver kanjis, mostre outro.
