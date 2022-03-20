@@ -88,12 +88,14 @@ body::-webkit-scrollbar {
   font-family: 'M PLUS Rounded 1c';
   width: 500px;
   position: relative;
+  overflow: auto;
 }
 
-.show-kanji p{
-  -webkit-animation:spin 1s linear infinite;
+.show-kanji img{
+  margin: 0;
+  -webkit-animation:spin 0.7s linear infinite;
   -moz-animation:spin 1s linear infinite;
-  animation:spin 1s linear infinite;
+  animation:spin 0.7s linear infinite;
 }
 
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
@@ -111,6 +113,38 @@ body::-webkit-scrollbar {
   padding: 10px;
   border: 2px black solid;
   border-radius: 10px;
+}
+
+.finished{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  line-height: normal;
+}
+
+.finished h4, .finished h5{
+  margin: 0;
+  font-family: 'M PLUS Rounded 1c';
+  font-weight: lighter;
+}
+
+.finished h4{
+  font-size: 95px;
+  height: 150px;
+  line-height: 150px;
+  margin-bottom: 20px;
+}
+
+.finished h5{
+  margin-top: 25px;
+  font-size: 60px;
+  line-height: 70px;
+  height: 70px;
+}
+
+.finished::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
 }
 
 

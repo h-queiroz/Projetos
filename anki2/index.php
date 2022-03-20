@@ -41,7 +41,7 @@
     <div class="JLPT">
       <form class="JLPT-form">
         <label>
-          <input type="checkbox" name="JLPTs[]" value="N5" checked>JLPT N5
+          <input type="checkbox" name="JLPTs[]" value="N5">JLPT N5
         </label>
         <label>
           <input type="checkbox" name="JLPTs[]" value="N4">JLPT N4
@@ -50,7 +50,7 @@
           <input type="checkbox" name="JLPTs[]" value="N3">JLPT N3
         </label>
         <label>
-          <input type="checkbox" name="JLPTs[]" value="N2">JLPT N2
+          <input type="checkbox" name="JLPTs[]" value="N2" checked>JLPT N2
         </label>
         <label>
           <input type="checkbox" name="JLPTs[]" value="N1">JLPT N1
@@ -162,9 +162,9 @@
 
       // Criando função de contagem a partir do momento que começar o jogo
       let contador;
-      function contar(){
-        let minutos = 0;
-        let segundos = 0;
+      function contar(m = 0, s = 0){
+        let minutos = m != 0 ? m : 0;
+        let segundos = s != 0 ? s : 0;
         if(typeof contador !== undefined){
           clearInterval(contador);
           timeMsg = `Contagem ${("0"+minutos).slice(-2)}:${("0"+segundos).slice(-2)}`;
@@ -217,6 +217,20 @@
 
         contar();
 
+        // Criando Função de parar o tempo se sair da aba atual.
+
+        window.onblur = () => {
+          document.title = "Pausado";
+          clearInterval(contador);
+        }
+
+        window.onfocus = () => {
+          let minutoAtual = parseInt(timeMsg.slice(9,11));
+          let segundoAtual = parseInt(timeMsg.slice(12,15));
+          contar(minutoAtual,segundoAtual);
+          document.title = "Voltou";
+        }
+
         // Gerando Evento que se o tecla "Enter" for pressionada, fará a verificação se o que foi digitado está certo
         resposta.onkeypress = function(event){
           // Se pressionar "Enter" e campo não estiver vazio..
@@ -231,6 +245,18 @@
                 alert('Acabaram os kanjis');
                 espaco.style = 'background-color: green';
                 submit.focus();
+                espaco.innerHTML = '';
+                espaco.classList.add('finished');
+                let h4 = document.createElement('h4')
+                h4.innerHTML = atual.simbolo;
+                let h5a = document.createElement('h5')
+                h5a.innerHTML = atual.kana;
+                let h5b = document.createElement('h5')
+                h5b.innerHTML = atual.english;
+                espaco.appendChild(h4);
+                espaco.appendChild(h5a);
+                espaco.appendChild(h5b);
+                resposta.value = "";
 
                 // E registre o tempo e a quantidade de erros cometidos
                 $.ajax({
@@ -304,6 +330,13 @@
 
       // Fazendo requisição de todos os kanjis no bando de dados
       function requisitar(niveis){
+        if(espaco.classList.contains('finished')){
+          espaco.classList.remove('finished');
+        }
+
+        // Animação de loading enquanto carrega os Kanji's
+        espaco.innerHTML = '<img src="assets/loading_icon.png" width="80px">';
+
         // Limpando os campos e restando valores para decidir jogar novamente
         kanjis = [];
         previous.innerHTML = '';
@@ -334,20 +367,6 @@
           }
         })
       }
-
-      // O que fazer quando requisição ajax começar
-      // $(document).ajaxStart(function(){
-      //   espaco.style = 'font-size: 20px';
-      //   let p = document.createElement('p');
-      //   p.innerText = 'aguarde';
-      //   espaco.innerHTML = '';
-      //   espaco.appendChild(p);
-      // });
-
-      // O que fazer quando requisição ajax terminar
-      // $(document).ajaxComplete(function(){
-        // espaco.style = 'font-size: 120px';
-      // });
     </script>
   </body>
 </html>
