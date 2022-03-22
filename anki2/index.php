@@ -44,13 +44,13 @@
           <input type="checkbox" name="JLPTs[]" value="N5">JLPT N5
         </label>
         <label>
-          <input type="checkbox" name="JLPTs[]" value="N4">JLPT N4
+          <input type="checkbox" name="JLPTs[]" value="N4" checked>JLPT N4
         </label>
         <label>
           <input type="checkbox" name="JLPTs[]" value="N3">JLPT N3
         </label>
         <label>
-          <input type="checkbox" name="JLPTs[]" value="N2" checked>JLPT N2
+          <input type="checkbox" name="JLPTs[]" value="N2">JLPT N2
         </label>
         <label>
           <input type="checkbox" name="JLPTs[]" value="N1">JLPT N1
@@ -145,11 +145,13 @@
       upArrow.addEventListener('click',()=>{
         nerros++;
         erros.innerHTML = `Erros: ${nerros}`;
+        resposta.focus();
       })
 
       downArrow.addEventListener('click',()=>{
         nerros--;
         erros.innerHTML = `Erros: ${nerros}`;
+        resposta.focus();
       })
 
       // Criando Evento de se usuário apertar TAB, ir direto para o campo de Resposta
@@ -163,6 +165,7 @@
       // Criando função de contagem a partir do momento que começar o jogo
       let contador;
       function contar(m = 0, s = 0){
+        console.log('começou a contar');
         let minutos = m != 0 ? m : 0;
         let segundos = s != 0 ? s : 0;
         if(typeof contador !== undefined){
@@ -229,7 +232,11 @@
           let segundoAtual = parseInt(timeMsg.slice(12,15));
           contar(minutoAtual,segundoAtual);
           document.title = "Voltou";
+          setTimeout(() =>{
+            document.title = "Projeto Anki Melhorado";
+          },2000)
         }
+
 
         // Gerando Evento que se o tecla "Enter" for pressionada, fará a verificação se o que foi digitado está certo
         resposta.onkeypress = function(event){
@@ -240,9 +247,22 @@
               // E se não sobrar mais nenhum kanji a ser verificado
               if (kanjis.length == 0) {
                 // Mostrar isso..
-                clearInterval(contador);
+                // Reproduzindo áudio do kanji
+                // $.ajax({
+                //     url:'audios/'+atual.simbolo,
+                //     type:'HEAD',
+                //     success: () => {
+                //       let audio = new Audio('audios/'+atual.simbolo);
+                //       audio.play();
+                //     }
+                // });
                 faltam.innerHTML = "Quantos faltam: 0";
                 alert('Acabaram os kanjis');
+                setTimeout(() => {
+                  clearInterval(contador);
+                },500);
+                window.onblur = null;
+                window.onfocus = null;
                 espaco.style = 'background-color: green';
                 submit.focus();
                 espaco.innerHTML = '';
@@ -284,6 +304,15 @@
                 // Se ainda tiver kanjis, mostre outro.
                 anterior = atual;
                 previous.innerHTML = '<span>'+anterior.simbolo+'</span><span>'+anterior.kana+'</span><span>'+anterior.english+'</span>';
+                // Reprodução de som do Kanji
+                // $.ajax({
+                //     url:'audios/'+anterior.simbolo,
+                //     type:'HEAD',
+                //     success: () => {
+                //       let audio = new Audio('audios/'+anterior.simbolo);
+                //       audio.play();
+                //     }
+                // });
                 pos = Math.floor(Math.random() * kanjis.length);
                 atual = kanjis.splice(pos,1)[0];
                 console.log(atual);
